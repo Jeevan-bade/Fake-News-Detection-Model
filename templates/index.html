@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake News Detector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Fake News Detector</h1>
+            <p class="subtitle">Powered by Machine Learning with 85% Accuracy</p>
+        </header>
+        
+        <main>
+            <div class="info-box">
+                <h2>How it works</h2>
+                <p>This tool uses a machine learning model trained with TF-IDF and Logistic Regression to analyze news text and determine if it's likely to be fake or legitimate news.</p>
+                <p>Simply paste the news article text in the box below and click "Analyze" to get results.</p>
+            </div>
+            
+            <form action="/predict" method="post" id="news-form">
+                <div class="form-group">
+                    <label for="news-text">News Article Text:</label>
+                    <textarea id="news-text" name="text" rows="10" placeholder="Paste news article text here..."></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Analyze</button>
+                    <button type="button" class="btn-secondary" id="clear-btn">Clear</button>
+                </div>
+            </form>
+            
+            <div class="sample-news">
+                <h3>Sample News for Testing</h3>
+                <div class="sample-buttons">
+                    <button class="sample-btn" data-type="fake">Sample Fake News</button>
+                    <button class="sample-btn" data-type="real">Sample Real News</button>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Fake News Detection Model | Reduces fact-checking time by 60%</p>
+        </footer>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

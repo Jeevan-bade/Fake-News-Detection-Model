@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake News Detector - Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Fake News Detector</h1>
+            <p class="subtitle">Analysis Results</p>
+        </header>
+        
+        <main>
+            <section class="result-container {% if prediction == 'Fake News' %}fake-news{% else %}real-news{% endif %}">
+                <h2 class="result-heading">{{ prediction }}</h2>
+                <div class="confidence-meter">
+                    <div class="confidence-bar" style="width: {{ percentage }}%;" aria-label="Confidence level: {{ percentage }}%"></div>
+                </div>
+                <p class="confidence-text">Confidence: {{ confidence }}</p>
+            </section>
+            
+            <section class="analyzed-text" aria-labelledby="analyzed-text-heading">
+                <h3 id="analyzed-text-heading">Analyzed Text:</h3>
+                <div class="text-box">
+                    <p>{{ text }}</p>
+                </div>
+            </section>
+            
+            <section class="explanation" aria-labelledby="explanation-heading">
+                <h3 id="explanation-heading">What does this mean?</h3>
+                <p>{{ explanation }}</p>
+                <p>Remember that this is a prediction with {{ confidence }} confidence and critical thinking is always important when consuming news.</p>
+                
+                {% if key_terms and key_terms[0] != "No specific key terms identified" %}
+                <div class="key-terms" aria-labelledby="key-terms-heading">
+                    <h4 id="key-terms-heading">Key terms that influenced this prediction:</h4>
+                    <ul class="terms-list">
+                        {% for term in key_terms %}
+                        <li class="term-item">{{ term }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                
+                <div class="tips" aria-labelledby="tips-heading">
+                    <h4 id="tips-heading">Tips for fact-checking:</h4>
+                    <ul>
+                        <li>Check if the story appears on multiple reputable news sites</li>
+                        <li>Look for the author's credentials and reputation</li>
+                        <li>Verify if sources are named and credible</li>
+                        <li>Check the publication date for context</li>
+                        <li>Be wary of sensational headlines that seem designed to provoke emotion</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <section class="share-section" aria-labelledby="share-heading">
+                <h3 id="share-heading">Share this analysis:</h3>
+                <div class="share-buttons">
+                    <button class="share-btn twitter" onclick="shareOnTwitter()" aria-label="Share on Twitter">
+                        <span class="share-icon" aria-hidden="true">🐦</span> Twitter
+                    </button>
+                    <button class="share-btn facebook" onclick="shareOnFacebook()" aria-label="Share on Facebook">
+                        <span class="share-icon" aria-hidden="true">📘</span> Facebook
+                    </button>
+                    <button class="share-btn linkedin" onclick="shareOnLinkedIn()" aria-label="Share on LinkedIn">
+                        <span class="share-icon" aria-hidden="true">🔗</span> LinkedIn
+                    </button>
+                    <button class="share-btn copy" onclick="copyLink()" aria-label="Copy link to clipboard">
+                        <span class="share-icon" aria-hidden="true">📋</span> Copy Link
+                    </button>
+                </div>
+                <div id="copy-message" class="copy-message" role="alert" aria-live="polite" style="display: none;">Link copied to clipboard!</div>
+            </section>
+            
+            <div class="actions">
+                <a href="/" class="btn-primary">Analyze Another Article</a>
+            </div>
+            
+            <script>
+                // Share functionality
+                function shareOnTwitter() {
+                    const text = "I just analyzed this text with Fake News Detector. Result: {{ prediction }} ({{ confidence }} confidence)";
+                    const url = window.location.href;
+                    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+                }
+                
+                function shareOnFacebook() {
+                    const url = window.location.href;
+                    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+                }
+                
+                function shareOnLinkedIn() {
+                    const url = window.location.href;
+                    const title = "Fake News Detection Analysis";
+                    const summary = "I just analyzed this text with Fake News Detector. Result: {{ prediction }} ({{ confidence }} confidence)";
+                    window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(summary)}`, '_blank');
+                }
+                
+                function copyLink() {
+                    const url = window.location.href;
+                    navigator.clipboard.writeText(url).then(() => {
+                        const copyMessage = document.getElementById('copy-message');
+                        copyMessage.style.display = 'block';
+                        setTimeout(() => {
+                            copyMessage.style.display = 'none';
+                        }, 2000);
+                    }).catch(err => {
+                        console.error('Failed to copy link: ', err);
+                        alert('Failed to copy link. Please try again or copy manually.');
+                    });
+                }
+                
+                // Initialize animation indices for result page elements
+                document.addEventListener('DOMContentLoaded', function() {
+                    const termItems = document.querySelectorAll('.term-item');
+                    const tipItems = document.querySelectorAll('.tips ul li');
+                    const shareButtons = document.querySelectorAll('.share-btn');
+                    
+                    // Set animation indices for term items
+                    if (termItems.length > 0) {
+                        termItems.forEach((item, index) => {
+                            item.style.setProperty('--index', index);
+                        });
+                    }
+                    
+                    // Set animation indices for tip items
+                    if (tipItems.length > 0) {
+                        tipItems.forEach((item, index) => {
+                            item.style.setProperty('--index', index);
+                        });
+                    }
+                    
+                    // Set animation indices for share buttons
+                    if (shareButtons.length > 0) {
+                        shareButtons.forEach((button, index) => {
+                            button.style.setProperty('--index', index);
+                        });
+                    }
+                });
+            </script>
+        </main>
+        
+        <footer>
+            <p>Fake News Detection Model | Reduces fact-checking time by 60%</p>
+        </footer>
+    </div>
+</body>
+</html>
