@@ -28,7 +28,7 @@
                 </div>
                 
                 <div class="form-actions">
-                    <button type="submit" class="btn-primary">Analyze</button>
+                    <button type="submit" class="btn-primary">Analyze <span class="loading" style="display: none;"></span></button>
                     <button type="button" class="btn-secondary" id="clear-btn">Clear</button>
                 </div>
             </form>
@@ -40,11 +40,36 @@
                     <button class="sample-btn" data-type="real">Sample Real News</button>
                 </div>
             </div>
+
+            <div id="error-container"></div>
+
+            <div id="result-box" class="result-box" style="display: none;">
+                <h3 class="result-title"></h3>
+                <div class="prediction"></div>
+                <div class="confidence"></div>
+                
+                <div class="explanation">
+                    <h4>Analysis Explanation</h4>
+                    <p class="explanation-text"></p>
+                </div>
+                
+                <div class="key-terms">
+                    <h4>Key Contributing Terms</h4>
+                    <p class="terms-text"></p>
+                </div>
+            </div>
         </main>
         
         <footer>
             <p>Fake News Detection Model | Reduces fact-checking time by 60%</p>
         </footer>
+    </div>
+
+    <div class="loading-overlay" style="display: none;">
+        <div class="loading-container">
+            <div class="spinner"></div>
+            <p class="loading-text">Analyzing text...</p>
+        </div>
     </div>
     
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
