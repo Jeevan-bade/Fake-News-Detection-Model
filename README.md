@@ -28,7 +28,7 @@ A machine learning model using TF-IDF and Logistic Regression to classify fake n
    ```
    pip install -r requirements.txt
    ```
-3. Run the model training script:
+3. Run the model training script(if .pkl file not in Model Folder):
    ```
    python model_training.py
    ```
